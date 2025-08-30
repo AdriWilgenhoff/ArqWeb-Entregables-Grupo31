@@ -5,12 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-@Setter
 @Getter
 public class FacturaProducto {
 
+
     private int idFactura;
+
     private int idProducto;
+
+    @Setter
     private int cantidad;
 
 }
