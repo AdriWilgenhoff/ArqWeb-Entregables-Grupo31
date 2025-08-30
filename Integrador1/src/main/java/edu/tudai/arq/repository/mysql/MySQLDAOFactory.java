@@ -1,13 +1,19 @@
-public class MySQLDAOFactory extends DAOFactory {
+package edu.tudai.arq.repository.mysql;
+
+import edu.tudai.arq.dao.ClienteDAO;
+import edu.tudai.arq.factory.ConnectionManager;
+import edu.tudai.arq.factory.DaoFactory;
+
+public class MySQLDAOFactory extends DaoFactory {
 
     @Override
-    public UsuarioDAO createUsuarioDAO() {
+    public ClienteDAO getClienteDAO() {
         // Devuelve la implementación concreta MySQL de UsuarioDAO
-        return new MySQLUsuarioDAO(ConnectionManager.getInstance().getConnectionLine());
+        return new MySQLClienteDAO (ConnectionManager.getInstance().getConnection());
 
     }
 
-    @Override
+    /*@Override
     public ProductoDAO createProductoDAO() {
         // Devuelve la implementación concreta MySQL de ProductoDAO
         return new MySQLProductoDAO(ConnectionManager.getInstance().getConnectionLine());;
@@ -22,6 +28,6 @@ public class MySQLDAOFactory extends DAOFactory {
     public DetallePedidoDAO createDetallePedidoDAO() {
         return new MySQLDetallePedidoDAO(ConnectionManager.getInstance().getConnectionLine()
         );
-    }
+    }*/
 
 }

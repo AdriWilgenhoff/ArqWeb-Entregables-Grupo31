@@ -2,7 +2,7 @@ package edu.tudai.arq.utils;
 
 public class BorrarDatos {
 
-    private final UsuarioDAO usuarioDAO;
+    /*private final UsuarioDAO usuarioDAO;
     private final ProductoDAO productoDAO;
     private final PedidoDAO pedidoDAO;
     private final DetallePedidoDAO detallePedidoDAO;
@@ -10,10 +10,11 @@ public class BorrarDatos {
 
     public BorrarDatos() {
         DAOFactory f = DAOFactory.getInstance();
-        this.usuarioDAO = f.createUsuarioDA0();
-        this.productoDAO = f.createProductoDA0();
-        this.pedidoDAO = f.createPedidoDA0();
-        this.detallePedidoDAO = f.createDetallePedidoDA0();
+
+        this.usuarioDAO = f.getUsuarioDA0();
+        this.productoDAO = f.getProductoDA0();
+        this.pedidoDAO = f.getPedidoDA0();
+        this.detallePedidoDAO = f.getDetallePedidoDA0();
     }
 
     public void run() {
@@ -31,6 +32,6 @@ public class BorrarDatos {
         } catch (Exception e) {
             throw new RuntimeException("Error durante el borrado masivo.", e);
         }
-    }
+    }*/
 
 }

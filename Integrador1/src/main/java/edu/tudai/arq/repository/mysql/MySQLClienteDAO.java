@@ -1,19 +1,57 @@
+package edu.tudai.arq.repository.mysql;
+
+import edu.tudai.arq.dao.ClienteDAO;
+import edu.tudai.arq.entity.Cliente;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class MySQLCompraDAO implements CompraDAO {
+public class MySQLClienteDAO implements ClienteDAO {
 
     private final Connection cn;
 
-    public MySQLCompraDAO(Connection cn) {
+    public MySQLClienteDAO(Connection cn) {
         this.cn = cn;
-        createTableIfNotExists();
+        //createTableIfNotExists();
     }
 
-    private void createTableIfNotExists() {
+    @Override
+    public Cliente findById(Long id) {
+        final String sql = "SELECT idCliente, nombre, email FROM Cliente WHERE idCliente = ?";
+
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setLong(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? new Cliente(
+                        rs.getInt("idCliente"),
+                        rs.getString("nombre"),
+                        rs.getString("email")
+                ) : null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error en findById", e);
+        }
+    }
+
+    @Override
+    public void insert(Cliente c) {
+        final String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?,?,?)";
+
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setLong(1, c.getId());
+            ps.setString(2, c.getNombre());
+            ps.setString(3, c.getEmail());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error en create", e);
+        }
+    }
+
+    /*private void createTableIfNotExists() {
         final String sql = "CREATE TABLE IF NOT EXISTS compras (" +
                 "id INT PRIMARY KEY AUTO_INCREMENT, " +
                 "usuario_id INT NOT NULL, " +
@@ -101,5 +139,5 @@ public class MySQLCompraDAO implements CompraDAO {
             throw new RuntimeException("Error borrando todas las compras", e);
         }
     }
-
+*/
 }
