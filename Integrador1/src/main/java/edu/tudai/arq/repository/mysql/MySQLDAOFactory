@@ -1,0 +1,27 @@
+public class MySQLDAOFactory extends DAOFactory {
+
+    @Override
+    public UsuarioDAO createUsuarioDAO() {
+        // Devuelve la implementación concreta MySQL de UsuarioDAO
+        return new MySQLUsuarioDAO(ConnectionManager.getInstance().getConnectionLine());
+
+    }
+
+    @Override
+    public ProductoDAO createProductoDAO() {
+        // Devuelve la implementación concreta MySQL de ProductoDAO
+        return new MySQLProductoDAO(ConnectionManager.getInstance().getConnectionLine());;
+    }
+
+    @Override
+    public PedidoDAO createPedidoDAO() {
+        return new MySQLPedidoDAO(ConnectionManager.getInstance().getConnectionLine());;
+    }
+
+    @Override
+    public DetallePedidoDAO createDetallePedidoDAO() {
+        return new MySQLDetallePedidoDAO(ConnectionManager.getInstance().getConnectionLine()
+        );
+    }
+
+}
