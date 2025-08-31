@@ -1,6 +1,7 @@
 package edu.tudai.arq.factory;
 
-import edu.tudai.arq.dao.ClienteDAO;
+import edu.tudai.arq.dao.*;
+import edu.tudai.arq.entity.Cliente;
 import edu.tudai.arq.repository.mysql.MySQLDAOFactory;
 
 public abstract class DaoFactory {
@@ -32,8 +33,10 @@ public abstract class DaoFactory {
     }
 
    public abstract ClienteDAO getClienteDAO();
-   //public abstract FacturaDAO getFacturaDAO();
-   //public abstract FacturaProductoDAO getFacturaProductoDAO();
-   //public abstract ProductoDAO getProductoDAO();
+    public abstract FacturaDAO getFacturaDAO();
+
+   public abstract FacturaProductoDAO getFacturaProductoDAO();
+
+   public abstract ProductoDAO getProductoDAO();
 
 }

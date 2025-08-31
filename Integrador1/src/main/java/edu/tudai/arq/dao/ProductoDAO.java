@@ -1,4 +1,6 @@
 package edu.tudai.arq.dao;
 
-public interface ProductoDAO {
+import edu.tudai.arq.entity.Producto;
+
+public interface ProductoDAO extends GenericDAO<Producto,Long>{
 }

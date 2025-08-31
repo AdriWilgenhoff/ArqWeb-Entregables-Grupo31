@@ -1,5 +1,6 @@
 package edu.tudai.arq.repository.mysql;
 
+import edu.tudai.arq.dao.AbstractDAO;
 import edu.tudai.arq.dao.ClienteDAO;
 import edu.tudai.arq.entity.Cliente;
 
@@ -8,14 +9,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
-public class MySQLClienteDAO implements ClienteDAO {
-
-    private final Connection cn;
+public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
     public MySQLClienteDAO(Connection cn) {
-        this.cn = cn;
+      super(cn);
         //createTableIfNotExists();
+    }
+
+    @Override
+    protected void createTableIfNotExists() {
+
     }
 
     @Override
@@ -38,7 +43,12 @@ public class MySQLClienteDAO implements ClienteDAO {
     }
 
     @Override
-    public void insert(Cliente c) {
+    public List<Cliente> findAll() {
+        return null;
+    }
+
+    @Override
+    public void create(Cliente c) {
         final String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?,?,?)";
 
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -49,6 +59,21 @@ public class MySQLClienteDAO implements ClienteDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error en create", e);
         }
+    }
+
+    @Override
+    public void update(Cliente entity) {
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public void deleteAll() {
+
     }
 
     /*private void createTableIfNotExists() {

@@ -1,4 +1,5 @@
 package edu.tudai.arq.dao;
 
-public interface FacturaProductoDAO {
-}
+import edu.tudai.arq.entity.FacturaProducto;
+
+public interface FacturaProductoDAO extends GenericDAO<FacturaProducto,Long> { }

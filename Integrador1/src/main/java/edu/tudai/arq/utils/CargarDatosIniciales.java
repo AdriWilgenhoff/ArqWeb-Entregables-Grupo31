@@ -1,13 +1,14 @@
 package edu.tudai.arq.utils;
 
 import edu.tudai.arq.dao.ClienteDAO;
-import edu.tudai.arq.entity.Cliente;
 import edu.tudai.arq.factory.DBType;
 import edu.tudai.arq.factory.DaoFactory;
+import edu.tudai.arq.utils.strategies.insert.data.InsertStrategy;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class CargarDatosIniciales {
 
@@ -18,15 +19,20 @@ public class CargarDatosIniciales {
         this.clienteDAO = f.getClienteDAO();
     }
 
-    public void run() {
-        cargarClientes("data/clientes.csv");
-        //cargarProductos("data/productos.csv");
-        //cargarPedidos("data/pedidos.csv");
+    public CargarDatosIniciales(DBType dbType) {
+        DaoFactory f = DaoFactory.getInstance(dbType);
+        this.clienteDAO = f.getClienteDAO();
     }
 
-    private void cargarClientes(String resourcePath) {
+    public void run(List<InsertStrategy> estrategias) {
+        for (InsertStrategy strategy : estrategias) {
+            loadWithStrategy(strategy);
+        }
+    }
+
+    private void loadWithStrategy(InsertStrategy strategy){
         int lineNo = 0;
-        try (InputStream is = mustGetResource(resourcePath);
+        try (InputStream is = mustGetResource(strategy.getResourcePath());
              BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 
             String line;
@@ -39,18 +45,15 @@ public class CargarDatosIniciales {
                 }
                 if (line.equals("")) continue;
 
-                String[] p = line.split(",", -1);
-
-                int id = Integer.parseInt(p[0].trim());
-                String nombre = p[1].trim();
-                String email = p[2].trim();
-
-                clienteDAO.insert(new Cliente(id, nombre, email));
+                String[] campos = line.split(",", -1);
+                strategy.insert(campos,lineNo);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error leyendo '" + resourcePath + "' en línea " + lineNo, e);
+            throw new RuntimeException("Error leyendo '" + strategy.getResourcePath() + "' en línea " + lineNo, e);
         }
     }
+
+
 
     private InputStream mustGetResource(String resourcePath) throws java.io.IOException {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
