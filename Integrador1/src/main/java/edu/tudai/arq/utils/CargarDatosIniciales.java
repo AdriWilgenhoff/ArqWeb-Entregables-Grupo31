@@ -1,6 +1,7 @@
 package edu.tudai.arq.utils;
 
 import edu.tudai.arq.dao.ClienteDAO;
+import edu.tudai.arq.dao.FacturaProductoDAO;
 import edu.tudai.arq.factory.DBType;
 import edu.tudai.arq.factory.DaoFactory;
 import edu.tudai.arq.utils.strategies.insert.data.InsertStrategy;
@@ -13,15 +14,18 @@ import java.util.List;
 public class CargarDatosIniciales {
 
     private final ClienteDAO clienteDAO;
+    private final FacturaProductoDAO facturaProductoDAO;
 
     public CargarDatosIniciales() {
         DaoFactory f = DaoFactory.getInstance(DBType.MYSQL);
         this.clienteDAO = f.getClienteDAO();
+        this.facturaProductoDAO = f.getFacturaProductoDAO();
     }
 
     public CargarDatosIniciales(DBType dbType) {
         DaoFactory f = DaoFactory.getInstance(dbType);
         this.clienteDAO = f.getClienteDAO();
+        this.facturaProductoDAO = f.getFacturaProductoDAO();
     }
 
     public void run(List<InsertStrategy> estrategias) {

@@ -5,7 +5,7 @@ public class BorrarDatos {
     /*private final UsuarioDAO usuarioDAO;
     private final ProductoDAO productoDAO;
     private final PedidoDAO pedidoDAO;
-    private final DetallePedidoDAO detallePedidoDAO;
+    private final FacturaProductoDAO facturaProductoDAO;
 
 
     public BorrarDatos() {
@@ -14,7 +14,7 @@ public class BorrarDatos {
         this.usuarioDAO = f.getUsuarioDA0();
         this.productoDAO = f.getProductoDA0();
         this.pedidoDAO = f.getPedidoDA0();
-        this.detallePedidoDAO = f.getDetallePedidoDA0();
+        this.facturaProductoDAO = f.getFacturaProductoDAO();
     }
 
     public void run() {

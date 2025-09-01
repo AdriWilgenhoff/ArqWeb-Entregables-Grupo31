@@ -1,6 +1,7 @@
 package edu.tudai.arq;
 
 import edu.tudai.arq.dao.ClienteDAO;
+//import edu.tudai.arq.dao.FacturaProductoDAO;
 import edu.tudai.arq.factory.DBType;
 import edu.tudai.arq.factory.DaoFactory;
 import edu.tudai.arq.utils.CargarDatosIniciales;
@@ -34,6 +35,9 @@ public class App
         ClienteDAO clienteDAO = factory.getClienteDAO();
 
         System.out.println(clienteDAO.findById(1L).getEmail());
+
+       // FacturaProductoDAO fpDAO = factory.getFacturaProductoDAO();
+
         //ProductoDAO productoDAO = factory.getProductoDA0();
 
         /*

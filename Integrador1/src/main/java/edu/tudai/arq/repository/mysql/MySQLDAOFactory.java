@@ -23,7 +23,7 @@ public class MySQLDAOFactory extends DaoFactory {
 
     @Override
     public FacturaProductoDAO getFacturaProductoDAO() {
-        return null;
+        return new MySQLFacturaProductoDAO(ConnectionManager.getInstance().getConnection());
     }
 
     @Override
