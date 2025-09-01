@@ -28,7 +28,7 @@ public class MySQLDAOFactory extends DaoFactory {
 
     @Override
     public ProductoDAO getProductoDAO() {
-        return null;
+        return new MySQLProductoDAO(ConnectionManager.getInstance().getConnection());
     }
 
     /*@Override

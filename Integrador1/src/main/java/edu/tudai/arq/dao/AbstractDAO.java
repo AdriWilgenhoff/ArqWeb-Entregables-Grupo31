@@ -10,6 +10,5 @@ public abstract class AbstractDAO {
         this.cn = cn;
     }
 
-
     protected abstract void createTableIfNotExists();
 }

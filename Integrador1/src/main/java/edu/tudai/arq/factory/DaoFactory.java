@@ -1,7 +1,6 @@
 package edu.tudai.arq.factory;
 
 import edu.tudai.arq.dao.*;
-import edu.tudai.arq.entity.Cliente;
 import edu.tudai.arq.repository.mysql.MySQLDAOFactory;
 
 public abstract class DaoFactory {
@@ -29,14 +28,11 @@ public abstract class DaoFactory {
         String v = System.getProperty("db.type", "MYSQL");
         DBType type = DBType.valueOf(v.toUpperCase());
         return getInstance(type);
-
     }
 
-   public abstract ClienteDAO getClienteDAO();
+    public abstract ClienteDAO getClienteDAO();
     public abstract FacturaDAO getFacturaDAO();
-
-   public abstract FacturaProductoDAO getFacturaProductoDAO();
-
-   public abstract ProductoDAO getProductoDAO();
+    public abstract FacturaProductoDAO getFacturaProductoDAO();
+    public abstract ProductoDAO getProductoDAO();
 
 }

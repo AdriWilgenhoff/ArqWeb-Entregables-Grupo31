@@ -2,6 +2,7 @@ package edu.tudai.arq.repository.mysql;
 
 import edu.tudai.arq.dao.AbstractDAO;
 import edu.tudai.arq.dao.ClienteDAO;
+import edu.tudai.arq.dto.ClienteConFacturacionDTO;
 import edu.tudai.arq.entity.Cliente;
 
 import java.sql.Connection;
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
@@ -75,6 +77,41 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
     public void deleteAll() {
 
     }
+
+    public List<ClienteConFacturacionDTO> getClientesPorMayorFacturacionDesc() {
+        final String sql =
+                "SELECT c.idCliente, c.nombre, c.email, " +
+                        "       SUM(p.valor * fp.cantidad) AS totalFacturado " +
+                        "FROM Cliente c " +
+                        "JOIN Factura f            USING (idCliente) " +
+                        "JOIN Factura_Producto fp  USING (idFactura) " +
+                        "JOIN Producto p           USING (idProducto) " +
+                        "GROUP BY c.idCliente, c.nombre, c.email " +
+                        "ORDER BY totalFacturado DESC";
+
+        List<ClienteConFacturacionDTO> clientes = new ArrayList<>();
+
+        try (PreparedStatement ps = cn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                clientes.add(new ClienteConFacturacionDTO(
+                        rs.getInt("idCliente"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getFloat("totalFacturado")
+                ));
+            }
+
+            return clientes;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener Clientes por facturación desc!", e);
+        }
+    }
+
+
+
 
     /*private void createTableIfNotExists() {
         final String sql = "CREATE TABLE IF NOT EXISTS compras (" +
