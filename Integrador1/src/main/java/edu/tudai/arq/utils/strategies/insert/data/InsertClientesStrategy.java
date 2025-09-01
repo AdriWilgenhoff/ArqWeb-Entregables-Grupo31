@@ -14,7 +14,7 @@ public class InsertClientesStrategy extends AbstractInsertStrategy {
 
     @Override
     public void insert(String[] campos, int lineNo) {
-        int id = Integer.parseInt(campos[0].trim());
+        Long id = Long.parseLong(campos[0].trim());
         String nombre = campos[1].trim();
         String email = campos[2].trim();
         clienteDAO.create(new Cliente(id, nombre, email));

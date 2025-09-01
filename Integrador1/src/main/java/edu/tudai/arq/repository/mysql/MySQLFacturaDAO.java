@@ -11,7 +11,7 @@ import java.util.List;
 public class MySQLFacturaDAO extends AbstractDAO implements FacturaDAO {
     protected MySQLFacturaDAO(Connection cn) {
         super(cn);
-        this.createTableIfNotExists();
+        //this.createTableIfNotExists();
     }
 
     @Override

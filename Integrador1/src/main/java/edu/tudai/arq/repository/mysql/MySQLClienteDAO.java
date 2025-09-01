@@ -13,11 +13,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
+public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO {
 
     protected MySQLClienteDAO(Connection cn) {
-      super(cn);
-        this.createTableIfNotExists();
+        super(cn);
+        //this.createTableIfNotExists();
     }
 
     @Override
@@ -27,9 +27,9 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
                 "nombre STRING NOT NULL" +
                 "email STRING NOT NULL" +
                 ")";
-        try (Statement st = cn.createStatement()){
+        try (Statement st = cn.createStatement()) {
             st.execute(sql);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Error al crear clientes");
         }
     }
@@ -43,9 +43,9 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? new Cliente(
-                        rs.getInt("idCliente");
-                        rs.getString("nombre");
-                        rs.getString("email");
+                        rs.getLong("idCliente"),
+                        rs.getString("nombre"),
+                        rs.getString("email")
                 ) : null;
             }
         } catch (SQLException e) {
@@ -63,7 +63,7 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
         final String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?,?,?)";
 
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setInt(1, c.getId());
+            ps.setLong(1, c.getId());
             ps.setString(2, c.getNombre());
             ps.setString(3, c.getEmail());
             ps.executeUpdate();
@@ -74,11 +74,11 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
     @Override
     public void update(Cliente entity) {
-        final String  sql = "UPDATE cliente SET nombre=?, email=? WHERE idCliente=?";
+        final String sql = "UPDATE cliente SET nombre=?, email=? WHERE idCliente=?";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setInt(1, entity.getIdCliente()),
-            ps.setInt(2, entity.getNombre()),
-            ps.setInt(3, entity.getEmail())
+            ps.setLong(1, entity.getId());
+            ps.setString(2, entity.getNombre());
+            ps.setString(3, entity.getEmail());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error en update", e);
@@ -88,8 +88,8 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
     @Override
     public void delete(Long id) {
         final String sql = "DELETE FROM clientes WHERE idCliente=?";
-        try (PreparedStatement ps = cn.prepareStatement(sql)){
-            ps.setInt(1, id);
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error en delete", e);
@@ -98,10 +98,10 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
     @Override
     public void deleteAll() {
-        try(Statement st = cn.createStatement()){
+        try (Statement st = cn.createStatement()) {
             final String sql = "DELETE FROM clientes";
             st.executeUpdate(sql);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Error borrando los clientes", e);
         }
 
@@ -125,7 +125,7 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
             while (rs.next()) {
                 clientes.add(new ClienteConFacturacionDTO(
-                        rs.getLong("idCliente"),
+                        rs.getInt("idCliente"),
                         rs.getString("nombre"),
                         rs.getString("email"),
                         rs.getFloat("totalFacturado")
@@ -138,5 +138,5 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
             throw new RuntimeException("Error al obtener Clientes por facturación desc!", e);
         }
     }
-
+}
 

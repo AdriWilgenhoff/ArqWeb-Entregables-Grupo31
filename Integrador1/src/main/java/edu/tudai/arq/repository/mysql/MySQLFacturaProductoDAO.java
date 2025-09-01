@@ -12,7 +12,7 @@ public class MySQLFacturaProductoDAO extends AbstractDAO implements FacturaProdu
 
     protected MySQLFacturaProductoDAO(Connection cn) {
         super(cn);
-        this.createTableIfNotExists();
+        //this.createTableIfNotExists();
     }
 
     @Override

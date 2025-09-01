@@ -19,9 +19,9 @@ public class App
     public static void main( String[] args )
     {
         //new BorrarDatos().run();
-        System.out.println("Borrado de tablas finalizado");
+        /*System.out.println("Borrado de tablas finalizado");
 
-        DaoFactory factory = DaoFactory.getInstance(DBType.MYSQL);
+
 
         List<InsertStrategy> estrategias = new ArrayList<>();
         estrategias.add(new InsertClientesStrategy(factory.getClienteDAO(), "data/clientes.csv"));
@@ -33,7 +33,8 @@ public class App
         loader.run(estrategias);
 
         System.out.println("Carga inicial finalizada.");
-
+*/
+        DaoFactory factory = DaoFactory.getInstance(DBType.MYSQL);
         ClienteDAO clienteDAO = factory.getClienteDAO();
         ProductoDAO productoDAO = factory.getProductoDAO();
 
