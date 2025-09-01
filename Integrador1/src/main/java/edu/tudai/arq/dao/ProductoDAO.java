@@ -6,5 +6,6 @@ import edu.tudai.arq.entity.Producto;
 public interface ProductoDAO extends GenericDAO<Producto,Long>{
 
     ProductoMayorRecaudacionDTO getProductoMayorRecaudacion();
-
+    void delete(Integer idProducto);
+    Producto findById(Integer idProducto);
 }

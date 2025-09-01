@@ -11,8 +11,9 @@ import lombok.ToString;
 @ToString
 public class Producto{
 
-    private int id;
+    private int idProducto;
     private String nombre;
     private Float valor;
+
 
 }
