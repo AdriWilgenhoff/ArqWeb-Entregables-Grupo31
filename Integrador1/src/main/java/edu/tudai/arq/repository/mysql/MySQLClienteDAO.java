@@ -15,14 +15,23 @@ import java.util.List;
 
 public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
-    public MySQLClienteDAO(Connection cn) {
+    protected MySQLClienteDAO(Connection cn) {
       super(cn);
-        //createTableIfNotExists();
+        this.createTableIfNotExists();
     }
 
     @Override
     protected void createTableIfNotExists() {
-
+        final String sql = "CREATE TABLE IF NOT EXISTS clientes (" +
+                "idCliente LONG NOT NULL " +
+                "nombre STRING NOT NULL" +
+                "email STRING NOT NULL" +
+                ")";
+        try (Statement st = cn.createStatement()){
+            st.execute(sql);
+        }catch(SQLException e){
+            throw new RuntimeException("Error al crear clientes");
+        }
     }
 
     @Override
@@ -34,9 +43,9 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? new Cliente(
-                        rs.getInt("idCliente"),
-                        rs.getString("nombre"),
-                        rs.getString("email")
+                        rs.getInt("idCliente");
+                        rs.getString("nombre");
+                        rs.getString("email");
                 ) : null;
             }
         } catch (SQLException e) {
@@ -54,7 +63,7 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
         final String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?,?,?)";
 
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setLong(1, c.getId());
+            ps.setInt(1, c.getId());
             ps.setString(2, c.getNombre());
             ps.setString(3, c.getEmail());
             ps.executeUpdate();
@@ -65,16 +74,36 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
     @Override
     public void update(Cliente entity) {
-
+        final String  sql = "UPDATE cliente SET nombre=?, email=? WHERE idCliente=?";
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, entity.getIdCliente()),
+            ps.setInt(2, entity.getNombre()),
+            ps.setInt(3, entity.getEmail())
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error en update", e);
+        }
     }
 
     @Override
     public void delete(Long id) {
-
+        final String sql = "DELETE FROM clientes WHERE idCliente=?";
+        try (PreparedStatement ps = cn.prepareStatement(sql)){
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error en delete", e);
+        }
     }
 
     @Override
     public void deleteAll() {
+        try(Statement st = cn.createStatement()){
+            final String sql = "DELETE FROM clientes";
+            st.executeUpdate(sql);
+        }catch(SQLException e){
+            throw new RuntimeException("Error borrando los clientes", e);
+        }
 
     }
 
@@ -96,7 +125,7 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
 
             while (rs.next()) {
                 clientes.add(new ClienteConFacturacionDTO(
-                        rs.getInt("idCliente"),
+                        rs.getLong("idCliente"),
                         rs.getString("nombre"),
                         rs.getString("email"),
                         rs.getFloat("totalFacturado")
@@ -111,95 +140,3 @@ public class MySQLClienteDAO extends AbstractDAO implements ClienteDAO{
     }
 
 
-
-
-    /*private void createTableIfNotExists() {
-        final String sql = "CREATE TABLE IF NOT EXISTS compras (" +
-                "id INT PRIMARY KEY AUTO_INCREMENT, " +
-                "usuario_id INT NOT NULL, " +
-                "producto_id INT NOT NULL, " +
-                "cantidad INT NOT NULL, " +
-                "FOREIGN KEY (usuario_id) REFERENCES usuarios(id), " +
-                "FOREIGN KEY (producto_id) REFERENCES productos(id)" +
-                ")";
-
-        try (Statement st = cn.createStatement()) {
-            st.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error creando tabla 'compras'", e);
-        }
-    }
-
-    @Override
-    public Compra findById(Long id) {
-        final String sql = "SELECT id, usuario_id, producto_id, cantidad FROM compras WHERE id = ?";
-
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setLong(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() ? mapRow(rs) : null;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error en findById", e);
-        }
-    }
-
-    @Override
-    public void create(Compra c) {
-        final String sql = "INSERT INTO compras (usuario_id, producto_id, cantidad) VALUES (?, ?, ?)";
-
-        try (PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, c.getUsuarioId());
-            ps.setLong(2, c.getProductoId());
-            ps.setInt(3, c.getCantidad());
-            ps.executeUpdate();
-
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) {
-                    c.setId(keys.getLong(1));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error en create", e);
-        }
-    }
-
-    @Override
-    public void update(Compra c) {
-        final String sql = "UPDATE compras SET usuario_id = ?, producto_id = ?, cantidad = ? WHERE id = ?";
-
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setLong(1, c.getUsuarioId());
-            ps.setLong(2, c.getProductoId());
-            ps.setInt(3, c.getCantidad());
-            ps.setLong(4, c.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error en update", e);
-        }
-    }
-
-    @Override
-    public void delete(long id) {
-        final String sql = "DELETE FROM compras WHERE id = ?";
-
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error en delete", e);
-        }
-    }
-
-    @Override
-    public void deleteAll() {
-        try (Statement st = cn.createStatement()) {
-            st.executeUpdate("DELETE FROM compras");
-            st.executeUpdate("ALTER TABLE compras AUTO_INCREMENT = 1");
-        } catch (SQLException e) {
-            throw new RuntimeException("Error borrando todas las compras", e);
-        }
-    }
-*/
-}
